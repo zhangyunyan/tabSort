@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        th {
+            width: 200px;
+            height: 60px;
+            background-color: darkblue;
+            color: white;
+        }
+
+        td {
+            width: 200px;
+            height: 50px;
+            background-color: lightblue;
+            color: black;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <thead class="title">
+    <tr>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>分数</th>
+    </tr>
+    </thead>
+    <tbody class="content">
+    <!--<tr>
+        <td>张运燕</td>
+        <td>33</td>
+        <td>98</td>
+    </tr>
+    <tr>
+        <td>张运燕</td>
+        <td>28</td>
+        <td>98</td>
+    </tr>
+    <tr>
+        <td>张运燕</td>
+        <td>10</td>
+        <td>98</td>
+    </tr>-->
+    </tbody>
+</table>
+<script src="jquery-1.11.2.min.js"></script>
+<script>
+    $(function () {
+        var data=null;
+        $.ajax({
+            url:"json.json",
+            async:false,
+            success:function (result) {
+                console.log(result)
+                var str = "";
+                for (var i = 0; i < result.length; i++) {
+                    str += `<tr>
+                            <td>${result[i].name}</td>
+                            <td>${result[i].age}</td>
+                            <td>${result[i].score}</td>
+                        </tr>`
+                }
+                $(".content").html(str);
+                $(".content>tr:odd>td").css({"backgroundColor": "pink"});
+            }
+        })
+        var flag=1;
+        var aTr = Array.prototype.slice.call($(".content>tr"));
+        $(".content>tr:odd>td").css({"backgroundColor": "pink"});
+        $(".title>tr>th").each(function (index, item) {
+            $(item).click(function () {
+                flag=flag*-1;
+                $("item").siblings().attr({flag:1});
+                aTr = aTr.sort(function (a, b) {
+                    if(isNaN(a)&&isNaN(b)){
+                        return $(a).children("td")[index].innerHTML.localeCompare($(b).children("td")[index].innerHTML)*flag;
+                    }
+                    return ($(a).children("td")[index].innerHTML - $(b).children("td")[index].innerHTML)*flag;
+                })
+                console.log(aTr)
+                var str = "";
+                for (var i = 0; i < aTr.length; i++) {
+                    str += `<tr>
+                            <td>${$(aTr[i]).children("td")[0].innerHTML}</td>
+                            <td>${$(aTr[i]).children("td")[1].innerHTML}</td>
+                            <td>${$(aTr[i]).children("td")[2].innerHTML}</td>
+                        </tr>`
+                }
+                $(".content").html(str);
+                $(".content>tr:odd>td").css({"backgroundColor": "pink"});
+            })
+
+        })
+
+    })
+</script>
+</body>
+</html>
